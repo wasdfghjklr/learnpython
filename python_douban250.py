@@ -4,7 +4,7 @@ Created on Sun Nov 15 19:45:00 2020
 learn python
 @author: wangrui
 """
-
+'''
 import requests # 导入网页请求库
 from bs4 import BeautifulSoup # 导入网页解析库
 import pprint # 使打印出来的列表更方便看
@@ -119,10 +119,30 @@ r.content # 网页源代码bytes型
 r.encoding
 r.apparent_encoding
 
-
+'''
 
 #### 多级链接
+import requests # 导入网页请求库
+from bs4 import BeautifulSoup # 导入网页解析库
 
+def start_requests(url):
+    r = requests.get(url)
+    return r.content
+
+def parse(text):
+    soup = BeautifulSoup(text, 'html.parser')
+    movie_list = soup.find_all('div', class_ = 'item')
+    for movie in movie_list:
+        print(movie.find('span', class_ = 'title').text)
+
+def main():
+    for i in range(10):
+        url = 'https://movie.douban.com/top250?start={}&filter='.format(i * 25)
+        text = start_requests(url)
+        parse(text)
+
+if __name__ == '__main__':
+    main()
 
 
 
